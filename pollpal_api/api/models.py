@@ -9,3 +9,7 @@ class Poll(models.Model):
 class Option(models.Model):
     text = models.CharField(max_length=150)
     poll = models.ForeignKey(Poll, related_name='options', on_delete=models.CASCADE)
+
+class Vote(models.Model):
+    option = models.ForeignKey(Option, related_name='votes', on_delete=models.CASCADE)
+    user_ip = models.GenericIPAddressField()
