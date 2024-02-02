@@ -8,21 +8,19 @@ from django.urls import reverse
 
 class PollsTest(APITestCase):
     def setUp(self):
-        self.current_date = datetime.now()
-        self.expires_at_date = make_aware(self.current_date + timedelta(days=1))
+        self.created_at_date = make_aware(datetime.now() - timedelta(days=1))
+        self.expires_at_date = self.created_at_date + timedelta(days=1)
 
     def test_polls_get_list(self):
         Poll.objects.create(
             question='Test question ?',
-            created_at=self.current_date,
+            created_at=self.created_at_date,
             expires_at=self.expires_at_date,
-            is_active=True
         )
         Poll.objects.create(
             question='Another test question ?',
-            created_at=self.current_date,
+            created_at=self.created_at_date,
             expires_at=self.expires_at_date,
-            is_active=True
         )
         url = reverse('poll_list')
         response = self.client.get(url, format='json')
@@ -52,9 +50,8 @@ class PollsTest(APITestCase):
 
         poll = Poll.objects.create(
             question='Test question ?',
-            created_at=self.current_date,
+            created_at=self.created_at_date,
             expires_at=self.expires_at_date,
-            is_active=True,
         )
         option = Option.objects.create(poll=poll, text='option 1')
         Option.objects.create(poll=poll, text='option 2')
@@ -73,9 +70,8 @@ class PollsTest(APITestCase):
     def test_poll_get(self):
         poll = Poll.objects.create(
             question='Test question ?',
-            created_at=self.current_date,
+            created_at=self.created_at_date,
             expires_at=self.expires_at_date,
-            is_active=True
         )
         url = reverse('poll_get', args=[poll.id])
         response = self.client.get(url, format='json')

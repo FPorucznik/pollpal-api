@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Option, Poll, Vote
+from datetime import datetime
+from django.utils.timezone import make_aware
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -59,6 +61,10 @@ class VoteSerializer(serializers.ModelSerializer):
 
         if option:
             poll = option.poll
+            now = make_aware(datetime.now())
+            if poll.expires_at > now:
+                raise serializers.ValidationError('The poll has expired')
+
             poll_options = poll.options.all()
 
             for poll_option in poll_options:
