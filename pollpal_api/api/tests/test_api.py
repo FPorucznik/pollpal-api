@@ -24,7 +24,7 @@ class PollsTest(APITestCase):
             expires_at=self.expires_at_date,
             is_active=True
         )
-        url = reverse('polls_list')
+        url = reverse('poll_list')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -69,3 +69,14 @@ class PollsTest(APITestCase):
         self.assertEqual(responseValidVote.status_code, status.HTTP_201_CREATED)
         self.assertEqual(responseInvalidVote.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Vote.objects.all().count(), 1)
+
+    def test_poll_get(self):
+        poll = Poll.objects.create(
+            question='Test question ?',
+            created_at=self.current_date,
+            expires_at=self.expires_at_date,
+            is_active=True
+        )
+        url = reverse('poll_get', args=[poll.id])
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
