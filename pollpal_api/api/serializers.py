@@ -49,7 +49,6 @@ class VoteSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        print(validated_data)
         option = validated_data.get('option')
         vote = Vote.objects.create(option=option, user_ip=validated_data.get('user_ip'))
         return vote
