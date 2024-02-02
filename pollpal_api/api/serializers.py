@@ -3,9 +3,14 @@ from .models import Option, Poll, Vote
 
 
 class OptionSerializer(serializers.ModelSerializer):
+    votes_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Option
-        fields = ['id', 'text']
+        fields = ['id', 'text', 'votes_count']
+
+    def get_votes_count(self, obj):
+        return obj.votes.count()
 
 
 class PollSerializer(serializers.ModelSerializer):
