@@ -4,13 +4,27 @@ from .models import Option, Poll, Vote
 
 class OptionSerializer(serializers.ModelSerializer):
     votes_count = serializers.SerializerMethodField()
+    percentage = serializers.SerializerMethodField()
 
     class Meta:
         model = Option
-        fields = ['id', 'text', 'votes_count']
+        fields = ['id', 'text', 'votes_count', 'percentage']
 
     def get_votes_count(self, obj):
         return obj.votes.count()
+
+    def get_percentage(self, obj):
+        poll = obj.poll
+        poll_options = poll.options.all()
+
+        votes_count = 0
+        for option in poll_options:
+            votes_count += option.votes.count()
+
+        if votes_count == 0:
+            return votes_count
+        else:
+            return round((obj.votes.count() / votes_count) * 100, 2)
 
 
 class PollSerializer(serializers.ModelSerializer):
