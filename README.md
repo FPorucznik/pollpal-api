@@ -46,14 +46,14 @@ api/v1/polls/<int:pk>/
 Options should be provided as a list of individual options like: **{'text': 'my option'}**
 
 ```
-api/v1/ polls/create/
+api/v1/polls/create/
 ```
 
 **Vote on an option:**
 The vote is validated so that a user can't duplicate votes on the same poll
 
 ```
-api/v1/ polls/vote/
+api/v1/polls/vote/
 ```
 
 ## Local setup guide
